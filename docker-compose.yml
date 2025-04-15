@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:4.4
+    container_name: voice_clone_mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - voice_clone_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=voice_clone_user
+      - MONGO_INITDB_ROOT_PASSWORD=voice_clone_password
+
+  backend:
+    build:
+      context: ./app/api
+      dockerfile: Dockerfile
+    container_name: voice_clone_backend
+    restart: always
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app/data:/app/data
+    environment:
+      - MONGO_URI=mongodb://voice_clone_user:voice_clone_password@mongo:27017
+    depends_on:
+      - mongo
+
+  frontend:
+    build:
+      context: ./app/client
+      dockerfile: Dockerfile
+    container_name: voice_clone_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  voice_clone_data: 

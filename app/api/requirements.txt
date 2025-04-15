@@ -1,0 +1,14 @@
+flask
+flask-cors
+TTS
+sounddevice
+torchaudio
+torch
+numpy
+python-dotenv
+librosa
+soundfile
+scipy
+pymongo
+gunicorn
+pydub
